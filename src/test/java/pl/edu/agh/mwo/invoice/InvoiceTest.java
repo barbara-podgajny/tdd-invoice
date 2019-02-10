@@ -7,7 +7,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import pl.edu.agh.mwo.invoice.Invoice;
 import pl.edu.agh.mwo.invoice.product.DairyProduct;
 import pl.edu.agh.mwo.invoice.product.OtherProduct;
 import pl.edu.agh.mwo.invoice.product.Product;
@@ -103,5 +102,44 @@ public class InvoiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testInvoiceWithNegativeQuantity() {
 		invoice.addProduct(new DairyProduct("Zsiadle mleko", new BigDecimal("5.55")), -1);
+	}
+
+	@Test
+	public void testInvoiceHasNumbergreaterThanZero() {
+		Integer number = invoice.getNumber();
+		Assert.assertNotNull(number);
+
+	}
+
+	@Test
+	public void testInvoiceHasNumber() {
+		Integer number = invoice.getNumber();
+		Assert.assertNotNull(number);
+
+	}
+
+	@Test
+	public void testInvoiceHasDifferentNumbers() {
+		Integer number1 = invoice.getNumber();
+		Integer number2 = new Invoice().getNumber();
+		Assert.assertNotEquals(number1, number2);
+
+	}
+
+	@Test
+	public void theSameInvoiceHastheSameNumber() {
+		Integer number1 = invoice.getNumber();
+		Integer number2 = invoice.getNumber();
+		Assert.assertNotEquals(number1, number2);
+
+	}
+
+	@Test
+	public void testTheSecondBigerThanFirst() {
+		for (int i = 0; i < 100; i++) {
+			Integer number1 = invoice.getNumber();
+			Integer number2 = new Invoice().getNumber();			
+			Assert.assertNotEquals(number1, Matchers.lessThan(number2));
+		}
 	}
 }
