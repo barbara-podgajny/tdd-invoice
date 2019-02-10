@@ -145,38 +145,41 @@ public class InvoiceTest {
 
 	@Test
 	public void testPrintedInvoiceContainsNumber() {
-	String printedInvoice = invoice.getAsText();
-	String number = invoice.getNumber().toString();
-	Assert.assertThat(printedInvoice,  Matchers.containsString("nr" + number));
-	
+		String printedInvoice = invoice.getAsText();
+		String number = invoice.getNumber().toString();
+		Assert.assertThat(printedInvoice, Matchers.containsString("nr" + number));
+
 	}
-	
+
 	@Test
 	public void testPrintedInvoiceHasContainsProduct() {
-		invoice.addProduct(
-				new TaxFreeProduct("chleb" , new BigDecimal ("5")), 2);
-	String printedInvoice = invoice.getAsText();
-	Assert.assertThat(
-			printedInvoice,  Matchers.containsString("Chleb 2 5"));
-	
+		invoice.addProduct(new TaxFreeProduct("chleb", new BigDecimal("5")), 2);
+		String printedInvoice = invoice.getAsText();
+		Assert.assertThat(printedInvoice, Matchers.containsString("Chleb 2 5"));
+
 	}
-	
+
 	@Test
 	public void testPrintedInvoiceContainsTheNumberOfProdcuts() {
-		invoice.addProduct(new TaxFreeProduct("chleb" , new BigDecimal ("5")), 2);
-		invoice.addProduct(new TaxFreeProduct("gumowa kaczka" , new BigDecimal ("5")), 2);
-		invoice.addProduct(new TaxFreeProduct("Prawdziwa kaczka" , new BigDecimal ("5")), 2);
-	Assert.assertThat( invoice.getAsText(),
-			 Matchers.containsString("Liczba pozycji: 3"));
+		invoice.addProduct(new TaxFreeProduct("chleb", new BigDecimal("5")), 2);
+		invoice.addProduct(new TaxFreeProduct("gumowa kaczka", new BigDecimal("5")), 2);
+		invoice.addProduct(new TaxFreeProduct("Prawdziwa kaczka", new BigDecimal("5")), 2);
+		Assert.assertThat(invoice.getAsText(), Matchers.containsString("Liczba pozycji: 3"));
 	}
 
+	@Test
+	public void testEachProductIsInNewLine() {
+		invoice.addProduct(new TaxFreeProduct("chleb", new BigDecimal("5")), 2);
+		invoice.addProduct(new TaxFreeProduct("frytki", new BigDecimal("6.50")), 3);
+		Assert.assertThat(invoice.getAsText(), Matchers.containsString("Chleb 2 5\nFrytki 3 6.50"));
 
-@Test
-public void testEachProductIsInNewLine() {
-	invoice.addProduct(new TaxFreeProduct("chleb" , new BigDecimal ("5")), 2);
-	invoice.addProduct(new TaxFreeProduct("frytki" , new BigDecimal ("6.50")), 3);
-Assert.assertThat( invoice.getAsText(),
-		 Matchers.containsString("Chleb 2 5\nFrytki 3 6.50"));
+	}
 
-} 
+	@Test
+	public void testAddingtheSameProductToInvoiceTwice() {
+		invoice.addProduct(new TaxFreeProduct("chleb", new BigDecimal("5")));
+		invoice.addProduct(new TaxFreeProduct("frytki", new BigDecimal("6.50")));
+		Assert.assertThat(invoice.getAsText(), Matchers.containsString("Chleb 2 5"));
+
+	}
 }
